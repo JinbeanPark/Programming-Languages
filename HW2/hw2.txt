@@ -1,0 +1,70 @@
+1. When I solve this problem, I tried separating starting symbol and 
+awksub_rules from the argument "gram1" first, and then I tried filtering
+every list which corresponds to the nonterminal symbol. However, I did
+not know how to filter every list which corresponds to each different
+kind of nonterminal symbol, so I tried referring every slide file for
+each discussion class, and I finally found out the hint that it is 
+possible to filter every lists which corresponds to each different kind
+of nonterminal symbol by returning the function type with starting symbol.
+
+2. When I solve this problem, I thought about the structure of tree
+to search the tree and find every encountered leaves. After understanding
+the structure of parse_tree, I tried making the parse_tree_leaves function
+by using the dfs and bfs functions. It searched given tree
+in DFS way first, and then it checked whether the type of parse_tree is
+Node or Leaf. it searched tree in BFS way if the type of parse_tree is
+Node while it continuously searcehd tree in DFS way if the type of 
+parse_tree is Leaf. Thus, it returns calling the bfs function 
+when it start searching tree in BFS way while it returns list of
+nonterminal symbol when the type of parse_tree is Leaf.
+For the bfs function, it checks every parse_tree one by one by separting
+these elements through head::rest, and it passes head to dfs function
+to check whether the passed head is Leaf or Node while it passes
+rest to bfs function. Two functions should be recursive function and
+be connected through "and" to be called each of them in their function.
+
+3. I separated starting symbol and production function from gram first,
+and then I checked each symbol in right hand side from top to bottom.
+If it encounters the nonterminal symbol, it passes the alternative list
+which corresponds to the nonterminal symbol it founds by using
+the production function, and it also passes the new acceptor 
+which contains the function which checks each symbol in right hand side
+, rest symbols in right hand side, and frag while it keeps checking
+rest right hand side with rest frag if it encounters the terminal symbol.
+
+4.
+When I approach this problem first, I tried using the function in
+problem 3. However, it also needs to pass the nonterminal symbol and
+explored trees as arguments to save the traces, so I added two more
+arguments on the function I used in problem 3. Before building parse_tree,
+it checks whether the given frag can be parsed entirely or not.
+The reason why it returns unexplored trees to parse tree being built
+because unexplored tails of tree need to know the already explored
+heads of tree.
+
+5.
+I wrote nontrivial test case for make_matcher function by using the
+major_grammar I made.
+
+6.
+I wrote three kinds of good test case for make_parser function
+
+7.
+I didn't write make_parser in terms of make_matcher, but I modified
+make_matcher to write make_parser by focusing on traces.
+make_matcher only focus on new acceptor and frag and does not
+need explored trees, but make_parser needs explored trees to build
+parse tree. Therefore, I passed two more arguments nonterminal symbol
+and searchedTrees to get traces.
+
+For the weakness in my solution, my solution is not efficient in terms of
+the time because my solution traverses every case of combination.
+Moreover, there are some cases which happen stack overflow.
+For example,
+Expr -> [N Expr; N Binop; N Expr]
+Expr -> [N Num]
+Binop -> [T"-"]
+Num -> [[T"1"]; [T"2"];]
+=> It should be able to express ["2"; "-"; "1"], but my solution went 
+into infinity loop because Expr keeps transforming to Expr Binop Expr 
+recursively.
